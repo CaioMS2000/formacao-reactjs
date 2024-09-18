@@ -24,7 +24,8 @@
 			"style": {
 				"noNonNullAssertion": "off",
 				"useSelfClosingElements": "off",
-				"useImportType":"off"
+				"useImportType":"off",
+				"noUselessElse": "off"
 			},
 			"suspicious": {
 				"noExplicitAny": "off"
