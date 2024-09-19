@@ -3,19 +3,31 @@ import { Comment } from './Comment'
 import { format, formatDistanceToNow } from 'date-fns'
 import ptBR from 'date-fns/locale/pt-BR'
 import styles from './Post.module.css'
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from 'react'
 
-/**
- * Renders a post component
- * @param {Object} props - The component props
- * @param {Object} props.author - The author of the post
- * @param {string} props.author.name - The name of the author
- * @param {string} props.author.role - The role of the author
- * @param {string} props.author.avatarUrl - The URL of the author's avatar
- * @param {Object} props.content - The content of the post
- * @param {Date} props.publishedAt - The date when the post was published
- */
-export function Post({ author, content, publishedAt }) {
+interface Author {
+    name: string
+    role: string
+    avatarUrl: string
+}
+
+interface Content {
+    type: 'paragraph' | 'link'
+    content: string
+}
+
+export interface PostType {
+    id: number
+    author: Author
+    publishedAt: Date
+    content: Content[]
+}
+
+interface PostProps{
+    post: PostType
+}
+
+export function Post({ post:{author, content, publishedAt} }: PostProps) {
     const [comments, setComments] = useState([
         'esse post seu deu uma nice dick, valeu mano',
     ])
@@ -30,24 +42,24 @@ export function Post({ author, content, publishedAt }) {
         addSuffix: true,
     })
 
-    function handleCreateNewComment() {
+    function handleCreateNewComment(event: FormEvent) {
         event.preventDefault()
 
         setComments([...comments, newCommentText])
         setNewCommentText('')
     }
 
-    function handleNewCommentChange() {
+    function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
         event.target.setCustomValidity('')
         setNewCommentText(event.target.value)
     }
 
-    function deleteComment(comment) {
+    function deleteComment(comment: string) {
         const commentsWithoutDeletedOne = comments.filter(c => c !== comment)
         setComments(commentsWithoutDeletedOne)
     }
 
-    function handleNewCommentInvalid(){
+    function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>){
         event.target.setCustomValidity('Esse campo é obrigatório!')
     }
 
