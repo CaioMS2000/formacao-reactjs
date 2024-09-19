@@ -89,3 +89,7 @@ typings/
 
 # Windows specific files
 Thumbs.db
+
+#others
+/package.json
+/package-lock.json
