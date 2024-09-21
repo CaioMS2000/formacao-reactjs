@@ -38,7 +38,9 @@
 				"useValidAnchor":"warn"
 			},
 			"correctness":{
-				"useExhaustiveDependencies":"warn"
+				"useExhaustiveDependencies":"warn",
+				"noUnreachable":"warn",
+				"noSwitchDeclarations": "info"
 			}
 		}
 	},
