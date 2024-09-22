@@ -1,48 +1,53 @@
+import { useContext } from 'react'
 import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
 import { SearchForm } from './components/SearchForm'
-import { TransactionsContainer, TransactionsTable, PriceHighlight } from './styles'
+import {
+    TransactionsContainer,
+    TransactionsTable,
+    PriceHighlight,
+} from './styles'
+import { TransactionsContext } from '../../contexts/TransactionsContext'
+import { dateFormatter, priceFormatter } from '../../utils/formatter'
+
+
 
 export function Transactions() {
+    const {transactions} = useContext(TransactionsContext)
+
     return (
         <div>
             <Header />
             <Summary />
 
             <TransactionsContainer>
-            <SearchForm />
+                <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        <tr>
-                            <td width="50%">Desenvolvimento de site</td>
-                            <td>
-                                <PriceHighlight variant="income">
-                                    R$ 12.000,00
-                                </PriceHighlight>
-                            </td>
-                            <td>Venda</td>
-                            <td>13/04/2024</td>
-                        </tr>
-                        <tr>
-                            <td width="50%">Aluguel do escritório</td>
-                            <td>
-                                <PriceHighlight variant="outcome">
-                                    - R$ 1.500,00
-                                </PriceHighlight>
-                            </td>
-                            <td>Despesa</td>
-                            <td>05/05/2024</td>
-                        </tr>
-                        <tr>
-                            <td width="50%">Consultoria em marketing</td>
-                            <td>
-                                <PriceHighlight variant="income">
-                                    R$ 3.000,00
-                                </PriceHighlight>
-                            </td>
-                            <td>Venda</td>
-                            <td>20/05/2024</td>
-                        </tr>
+                        {transactions.map(transaction => {
+                            return (
+                                <tr key={transaction.id}>
+                                    <td width="50%">
+                                        {transaction.description}
+                                    </td>
+                                    <td>
+                                        <PriceHighlight
+                                            variant={transaction.type}
+                                        >
+                                            {transaction.type === 'outcome' &&
+                                                '- '}
+                                            {priceFormatter.format(transaction.price)}
+                                        </PriceHighlight>
+                                    </td>
+                                    <td>{transaction.category}</td>
+                                    <td>
+                                        {dateFormatter.format(
+                                            new Date(transaction.createdAt)
+                                        )}
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </TransactionsTable>
             </TransactionsContainer>
