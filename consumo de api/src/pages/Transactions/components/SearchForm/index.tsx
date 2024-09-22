@@ -7,18 +7,22 @@ import { TransactionsContext } from '../../../../contexts/TransactionsContext'
 import { useContext } from 'react'
 
 const searchFormSchema = z.object({
-    query: z.string()
+    query: z.string(),
 })
 
 type SearchFormInputs = z.infer<typeof searchFormSchema>
 
 export function SearchForm() {
-    const { register, handleSubmit, formState:{isSubmitting} } = useForm<SearchFormInputs>({
+    const {
+        register,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = useForm<SearchFormInputs>({
         resolver: zodResolver(searchFormSchema),
     })
-    const {fetchTransactions} = useContext(TransactionsContext)
+    const { fetchTransactions } = useContext(TransactionsContext)
 
-    async function handleSearchTransactions(data: SearchFormInputs){
+    async function handleSearchTransactions(data: SearchFormInputs) {
         await fetchTransactions(data.query)
     }
 

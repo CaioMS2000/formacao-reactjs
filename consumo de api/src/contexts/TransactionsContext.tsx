@@ -38,14 +38,17 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
                 _sort: 'createdAt',
                 _order: 'desc',
                 q: query,
-            }
+            },
         })
 
         setTransactions(response.data)
     }
 
     async function createTransaction(data: CreateTransactionInput) {
-        const response = await api.post('transactions', {...data, createdAt: new Date()})
+        const response = await api.post('transactions', {
+            ...data,
+            createdAt: new Date(),
+        })
 
         setTransactions(state => [response.data, ...state])
     }
@@ -55,7 +58,9 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     }, [])
 
     return (
-        <TransactionsContext.Provider value={{ transactions, fetchTransactions, createTransaction }}>
+        <TransactionsContext.Provider
+            value={{ transactions, fetchTransactions, createTransaction }}
+        >
             {children}
         </TransactionsContext.Provider>
     )
