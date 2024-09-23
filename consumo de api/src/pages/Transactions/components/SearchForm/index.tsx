@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TransactionsContext } from '../../../../contexts/TransactionsContext'
-import { useContext } from 'react'
+import { useContextSelector } from 'use-context-selector'
 
 const searchFormSchema = z.object({
     query: z.string(),
@@ -20,7 +20,11 @@ export function SearchForm() {
     } = useForm<SearchFormInputs>({
         resolver: zodResolver(searchFormSchema),
     })
-    const { fetchTransactions } = useContext(TransactionsContext)
+    const { fetchTransactions } = useContextSelector(TransactionsContext, context => {
+        return {
+            fetchTransactions: context.fetchTransactions,
+        }
+    })
 
     async function handleSearchTransactions(data: SearchFormInputs) {
         await fetchTransactions(data.query)
