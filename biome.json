@@ -28,7 +28,8 @@
 				"noUselessElse": "off"
 			},
 			"suspicious": {
-				"noExplicitAny": "off"
+				"noExplicitAny": "off",
+				"noArrayIndexKey":"warn"
 			},
 			"complexity":{
 				"noStaticOnlyClass": "off",
