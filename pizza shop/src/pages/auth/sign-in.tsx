@@ -1,9 +1,11 @@
+import { signIn } from '@/api/sign-in'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useMutation } from '@tanstack/react-query'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -13,11 +15,19 @@ const signInformSchema = z.object({
 type SignInFormData = z.infer<typeof signInformSchema>
 
 export function SignIn() {
-    const {register, handleSubmit, formState:{isSubmitting}} = useForm<SignInFormData>()
+    const [searchParams] = useSearchParams()
+    const {register, handleSubmit, formState:{isSubmitting}} = useForm<SignInFormData>({
+        defaultValues: {
+            email: searchParams.get('email') ?? '',
+        },
+    })
+    const {mutateAsync: authenticate} = useMutation({
+        mutationFn: signIn
+    })
 
     async function handleSignIn(data: SignInFormData) {
         try {
-            console.log(data)
+            authenticate({email: data.email})
             toast.success("Link de autenticação enviado para o seu e-mail", {
                 action:{
                     label: "Tentar novamente",
