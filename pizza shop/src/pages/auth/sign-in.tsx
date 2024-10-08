@@ -30,7 +30,7 @@ export function SignIn() {
             authenticate({email: data.email})
             toast.success("Link de autenticação enviado para o seu e-mail", {
                 action:{
-                    label: "Tentar novamente",
+                    label: "Reenviar",
                     onClick: () => {handleSignIn(data)},
                 }
             })

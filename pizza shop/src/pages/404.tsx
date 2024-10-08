@@ -1,10 +1,6 @@
-import { PropsWithChildren, HTMLProps } from 'react';
 import { Link } from 'react-router-dom';
-
-interface NotFoundProps extends PropsWithChildren, HTMLProps<HTMLElement> {
-}
-	  
-export default function NotFound({...rest}:NotFoundProps){
+ 
+export function NotFound(){
 	  
 	return(
 		<>

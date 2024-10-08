@@ -1,19 +1,10 @@
+import { getPopularProducts } from '@/api/get-popular-products'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useQuery } from '@tanstack/react-query'
 import { BarChart } from 'lucide-react'
-import { PropsWithChildren, HTMLProps } from 'react'
-import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from 'recharts'
+import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import colors from 'tailwindcss/colors'
 
-interface PopularProductsChartProps
-    extends PropsWithChildren,
-        HTMLProps<HTMLElement> {}
-const data = [
-    { product: 'Margherita', amount: 400 },
-    { product: 'Pepperoni', amount: 550 },
-    { product: 'Quattro Formaggi', amount: 300 },
-    { product: 'Hawaiiana', amount: 200 },
-    { product: 'Vegetariana', amount: 350 },
-]
 const COLORS = [
     colors.blue[500],
     colors.red[500],
@@ -21,7 +12,12 @@ const COLORS = [
     colors.yellow[500],
     colors.purple[500],
 ]
-export function PopularProductsChart({ ...rest }: PopularProductsChartProps) {
+export function PopularProductsChart() {
+    const { data: popularProducts } = useQuery({
+        queryFn: getPopularProducts,
+        queryKey: ['metrics', 'popular-products'],
+    })
+
     return (
         <>
             <Card className="col-span-3">
@@ -34,10 +30,11 @@ export function PopularProductsChart({ ...rest }: PopularProductsChartProps) {
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <ResponsiveContainer width={'100%'} height={248}>
+                    {popularProducts && (
+                        <ResponsiveContainer width={'100%'} height={248}>
                         <PieChart style={{ fontSize: 12 }}>
                             <Pie
-                                data={data}
+                                data={popularProducts}
                                 nameKey={'product'}
                                 dataKey={'amount'}
                                 cx="50%"
@@ -77,17 +74,17 @@ export function PopularProductsChart({ ...rest }: PopularProductsChartProps) {
                                             }
                                             dominantBaseline="central"
                                         >
-                                            {data[index].product.length > 12
-                                                ? data[index].product
+                                            {popularProducts[index].product.length > 12
+                                                ? popularProducts[index].product
                                                       .substring(0, 12)
                                                       .concat('...')
-                                                : data[index].product}{' '}
+                                                : popularProducts[index].product}{' '}
                                             ({value})
                                         </text>
                                     )
                                 }}
                             >
-                                {data.map((_, index) => {
+                                {popularProducts.map((_, index) => {
                                     return (
                                         <Cell
                                             key={`cell-${index}`}
@@ -99,6 +96,7 @@ export function PopularProductsChart({ ...rest }: PopularProductsChartProps) {
                             </Pie>
                         </PieChart>
                     </ResponsiveContainer>
+                    )}
                 </CardContent>
             </Card>
         </>
