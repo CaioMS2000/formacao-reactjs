@@ -10,6 +10,7 @@ import { DateRangePicker } from '@/components/ui/date-range-picker'
 import { Label } from '@/components/ui/label'
 import { useQuery } from '@tanstack/react-query'
 import { subDays } from 'date-fns'
+import { Loader2 } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import {
@@ -29,10 +30,11 @@ export function RevenueChart() {
     })
     const { data: dailyRevenueInPeriod } = useQuery({
         queryKey: ['metrics', 'daily-receipt-in-period', dateRange],
-        queryFn: () => getDailyReceiptInPeriod({
-            from: dateRange?.from,
-            to: dateRange?.to,
-        }),
+        queryFn: () =>
+            getDailyReceiptInPeriod({
+                from: dateRange?.from,
+                to: dateRange?.to,
+            }),
     })
 
     const chartData = useMemo(() => {
@@ -57,14 +59,15 @@ export function RevenueChart() {
                         </CardDescription>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Label>
-                            Perídodo
-                        </Label>
-                        <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+                        <Label>Perídodo</Label>
+                        <DateRangePicker
+                            date={dateRange}
+                            onDateChange={setDateRange}
+                        />
                     </div>
                 </CardHeader>
                 <CardContent>
-                    {chartData && (
+                    {chartData ? (
                         <ResponsiveContainer width={'100%'} height={248}>
                             <LineChart
                                 data={chartData}
@@ -100,6 +103,10 @@ export function RevenueChart() {
                                 />
                             </LineChart>
                         </ResponsiveContainer>
+                    ) : (
+                        <div className="flex h-[240px] w-full items-center justify-center">
+                            <Loader2 className="h-8 w-8 text-muted-foreground animate-spin" />
+                        </div>
                     )}
                 </CardContent>
             </Card>
