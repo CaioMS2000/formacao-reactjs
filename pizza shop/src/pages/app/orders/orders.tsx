@@ -7,8 +7,8 @@ import {
 } from '@/components/ui/table'
 import { Helmet } from 'react-helmet-async'
 import OrderTableRow from './order-table-row'
-import {OrderTableFilters} from './order-table-filters'
-import {Paginations} from '@/components/paginations'
+import { OrderTableFilters } from './order-table-filters'
+import { Pagination } from '@/components/pagination'
 import { useQuery } from '@tanstack/react-query'
 import { getOrders } from '@/api/get-orders'
 import { useSearchParams } from 'react-router-dom'
@@ -73,7 +73,7 @@ export function Orders() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {isLoadingOrders && <OrdersTableSkeleton/>}
+                                {isLoadingOrders && <OrdersTableSkeleton />}
                                 {result &&
                                     result.orders &&
                                     result.orders.map(order => {
@@ -88,9 +88,9 @@ export function Orders() {
                         </Table>
                     </div>
                     {result && result.meta && (
-                        <Paginations
+                        <Pagination
                             pageIndex={pageIndex}
-                            totallPages={result.meta.totalCount}
+                            totalPages={result.meta.totalCount}
                             perPage={result.meta.perPage}
                             onPageChange={handlePaginate}
                         />
