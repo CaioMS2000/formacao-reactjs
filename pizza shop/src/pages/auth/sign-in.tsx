@@ -12,11 +12,11 @@ import { z } from 'zod'
 const signInformSchema = z.object({
     email: z.string().email('Informe um e-mail válido'),
 })
-type SignInFormData = z.infer<typeof signInformSchema>
+type SignInSchema = z.infer<typeof signInformSchema>
 
 export function SignIn() {
     const [searchParams] = useSearchParams()
-    const {register, handleSubmit, formState:{isSubmitting}} = useForm<SignInFormData>({
+    const {register, handleSubmit, formState:{isSubmitting}} = useForm<SignInSchema>({
         defaultValues: {
             email: searchParams.get('email') ?? '',
         },
@@ -25,21 +25,20 @@ export function SignIn() {
         mutationFn: signIn
     })
 
-    async function handleSignIn(data: SignInFormData) {
+    async function handleAuthenticate({ email }: SignInSchema) {
         try {
-            authenticate({email: data.email})
-            toast.success("Link de autenticação enviado para o seu e-mail", {
-                action:{
-                    label: "Reenviar",
-                    onClick: () => {handleSignIn(data)},
-                }
-            })
-        } catch (error) {
-            console.log('DEU ERRO NO LOGIN')
-            console.log(error)
-            toast.error("Credenciais inválidas")
+          await authenticate({ email })
+    
+          toast.success('Link de autenticação enviado para o seu e-mail', {
+            action: {
+              label: 'Reenviar',
+              onClick: () => authenticate({ email }),
+            },
+          })
+        } catch (err) {
+          toast.error('Credenciais inválidas')
         }
-    }
+      }
 
     return (
         <>
@@ -57,7 +56,7 @@ export function SignIn() {
                             Acompanhe suas vendas pelo painel do parceiro!
                         </p>
                     </div>
-                    <form className="space-y-4" onSubmit={handleSubmit(handleSignIn)}>
+                    <form className="space-y-4" onSubmit={handleSubmit(handleAuthenticate)}>
                         <div className="space-y-2">
                             <Label htmlFor="email">Seu e-mail</Label>
                             <Input id="email" type="email" {...register('email')} />
