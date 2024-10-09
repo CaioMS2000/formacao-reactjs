@@ -113,7 +113,7 @@ export default function OrderTableRow({ order }: OrderTableRowProps) {
                     </Dialog>
                 </TableCell>
                 <TableCell className="font-mono text-xs font-medium">
-                    447d4wfewt4
+                    {order.orderId}
                 </TableCell>
                 <TableCell>
                     {formatDistanceToNow(order.createdAt, {

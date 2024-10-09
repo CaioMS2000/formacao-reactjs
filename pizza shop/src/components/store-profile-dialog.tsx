@@ -20,7 +20,7 @@ import { toast } from 'sonner'
 
 const storeProfileSchema = z.object({
     name: z.string().min(3),
-    description: z.string().min(3),
+    description: z.string().nullable(),
 })
 type StoreProfileSchema = z.infer<typeof storeProfileSchema>
 
