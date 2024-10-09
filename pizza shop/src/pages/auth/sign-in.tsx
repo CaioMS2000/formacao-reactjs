@@ -35,6 +35,8 @@ export function SignIn() {
                 }
             })
         } catch (error) {
+            console.log('DEU ERRO NO LOGIN')
+            console.log(error)
             toast.error("Credenciais inválidas")
         }
     }
@@ -44,7 +46,7 @@ export function SignIn() {
             <Helmet title="Login" />
             <div className="p-8">
                 <Button asChild variant="link" className='absolute right-8 top-8'>
-                    <Link to="/sign-up">Novo estabeleciemnto</Link>
+                    <Link to="/sign-up">Novo estabelecimento</Link>
                 </Button>
                 <div className="w-[350px] flex flex-col justify-center gap-6">
                     <div className="flex flex-col gap-2 text-center">
