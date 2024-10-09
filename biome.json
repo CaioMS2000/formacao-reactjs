@@ -44,6 +44,9 @@
 				"useExhaustiveDependencies":"warn",
 				"noUnreachable":"warn",
 				"noSwitchDeclarations": "info"
+			},
+			"security":{
+				"noDangerouslySetInnerHtml":"warn"
 			}
 		}
 	},
