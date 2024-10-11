@@ -1,0 +1,10 @@
+{
+    "name": "@caioms/biomejs-config",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "biome.json",
+    "private": true,
+    "devDependencies": {
+        "@biomejs/biome": "1.9.3"
+    }
+}

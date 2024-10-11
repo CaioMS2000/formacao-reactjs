@@ -1,0 +1,3 @@
+{
+    "extends": ["@caioms/biomejs-config/biome.json"]
+}
