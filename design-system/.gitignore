@@ -1,3 +1,5 @@
 .turbo
 storybook-static
 dist
+dist/
+/dist/
