@@ -1,47 +1,41 @@
 {
   "name": "@ignite-ui/docs",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "license": "MIT",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev:vite": "vite",
-    "build:vite": "tsc -b && vite build",
-    "preview": "vite preview",
-    "dev": "storybook dev -p 6006",
-    "build": "storybook build"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "start-storybook -p 6006",
+    "deploy-storybook": "storybook-to-ghpages",
+    "build": "build-storybook"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@mdx-js/react": "^1.6.22",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-vite": "^0.2.3",
+    "@storybook/react": "^6.5.12",
+    "@storybook/storybook-deployer": "^2.8.12",
+    "@storybook/testing-library": "^0.0.13",
+    "@vitejs/plugin-react": "^2.1.0",
+    "babel-loader": "^8.2.5",
+    "vite": "^3.1.4"
   },
   "dependencies": {
+    "@caioms/biomejs-config": "*",
     "@ignite-ui/react": "*",
     "@ignite-ui/tokens": "*",
-    "polished": "^4.3.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@caioms/biomejs-config": "*",
-    "@chromatic-com/storybook": "^1.9.0",
-    "@storybook/addon-essentials": "^8.3.5",
-    "@storybook/addon-interactions": "^8.3.5",
-    "@storybook/addon-links": "^8.3.5",
-    "@storybook/addon-onboarding": "^8.3.5",
-    "@storybook/blocks": "^8.3.5",
-    "@storybook/manager-api": "^8.3.5",
-    "@storybook/react": "^8.3.5",
-    "@storybook/react-vite": "^8.3.5",
-    "@storybook/test": "^8.3.5",
-    "@storybook/theming": "^8.3.5",
-    "@types/react": "^18.3.10",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.2",
-    "globals": "^15.9.0",
-    "storybook": "^8.3.5",
-    "typescript": "^5.5.3",
-    "vite": "^5.4.8"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
+    "@ignite-ui/ts-config": "*",
+    "@storybook/addon-a11y": "^6.5.12",
+    "phosphor-react": "^1.4.1",
+    "polished": "^4.2.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
