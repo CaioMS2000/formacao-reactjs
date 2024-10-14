@@ -1,5 +1,1 @@
-export default function Home() {
-  return (
-    <></>
-  )
-}
+export {default} from './home'
