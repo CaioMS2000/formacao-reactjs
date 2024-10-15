@@ -8,8 +8,8 @@ export default async function handler(
 ) {
     if (req.method !== 'POST') return res.status(405).end()
 
-    const { name, userName } = req.body
-    const userExists = await prisma.user.findUnique({ where: { userName } })
+    const { name, username } = req.body
+    const userExists = await prisma.user.findUnique({ where: { username } })
 
     if (userExists)
         return res.status(400).json({ message: 'Username already in use.' })
@@ -17,7 +17,7 @@ export default async function handler(
     const user = await prisma.user.create({
         data: {
             name,
-            userName,
+            username,
         },
     })
 

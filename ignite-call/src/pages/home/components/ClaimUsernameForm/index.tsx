@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 
 const claimUsernameFormSchema = z.object({
-    userName: z
+    username: z
         .string()
         .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
         .regex(/^([a-z\\-]+)$/i, {
@@ -28,15 +28,15 @@ export function ClaimUsernameForm() {
     })
     const router = useRouter()
 
-    async function handleClaimUsername({userName}: ClaimUsernameFormData) {
-        await router.push(`/register?username=${userName}`)
+    async function handleClaimUsername({ username }: ClaimUsernameFormData) {
+        await router.push(`/register?username=${username}`)
     }
 
     return (
         <>
             <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
                 <TextInput
-                    {...register('userName')}
+                    {...register('username')}
                     size={'sm'}
                     prefix="ignite.com/"
                     placeholder="seu-usuario"
@@ -47,8 +47,8 @@ export function ClaimUsernameForm() {
             </Form>
             <FormAnnotation>
                 <Text size={'sm'}>
-                    {errors.userName
-                        ? errors.userName.message
+                    {errors.username
+                        ? errors.username.message
                         : 'Digite o nome do usuário desejado'}
                 </Text>
             </FormAnnotation>

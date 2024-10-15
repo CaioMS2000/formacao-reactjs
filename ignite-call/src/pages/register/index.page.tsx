@@ -12,7 +12,7 @@ const registerFormSchema = z.object({
     name: z
         .string()
         .min(3, { message: 'O nome precisa ter pelo menos 3 letras.' }),
-    userName: z
+    username: z
         .string()
         .min(3, { message: 'O usuário precisa ter pelo menos 3 letras.' })
         .regex(/^([a-z\\-]+)$/i, {
@@ -25,15 +25,20 @@ type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
     const router = useRouter()
-    const {register, handleSubmit, setValue, formState:{errors, isSubmitting}} = useForm<RegisterFormData>({
-        resolver: zodResolver(registerFormSchema)
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState: { errors, isSubmitting },
+    } = useForm<RegisterFormData>({
+        resolver: zodResolver(registerFormSchema),
     })
 
-    async function handleRegister(data: RegisterFormData){
+    async function handleRegister(data: RegisterFormData) {
         try {
             await api.post('/users', {
                 name: data.name,
-                userName: data.userName,
+                username: data.username,
             })
 
             await router.push('/register/connect-calendar')
@@ -43,8 +48,8 @@ export default function Register() {
     }
 
     useEffect(() => {
-        if(router.query.username){
-            setValue('userName', String(router.query.username))
+        if (router.query.username) {
+            setValue('username', String(router.query.username))
         }
     }, [router.query?.username, setValue])
 
@@ -62,13 +67,28 @@ export default function Register() {
                 <Form as="form" onSubmit={handleSubmit(handleRegister)}>
                     <label>
                         <Text size="sm">Nome de usuário</Text>
-                        <TextInput {...register('userName')} prefix='ignite.com/' placeholder='seu-usuario'/>
-                        {errors.userName && <FormError size='sm'>{errors.userName.message}</FormError>}
+                        <TextInput
+                            {...register('username')}
+                            prefix="ignite.com/"
+                            placeholder="seu-usuario"
+                        />
+                        {errors.username && (
+                            <FormError size="sm">
+                                {errors.username.message}
+                            </FormError>
+                        )}
                     </label>
                     <label>
                         <Text size="sm">Nome completo</Text>
-                        <TextInput {...register('name')} placeholder='Seu nome'/>
-                        {errors.name && <FormError size='sm'>{errors.name.message}</FormError>}
+                        <TextInput
+                            {...register('name')}
+                            placeholder="Seu nome"
+                        />
+                        {errors.name && (
+                            <FormError size="sm">
+                                {errors.name.message}
+                            </FormError>
+                        )}
                     </label>
 
                     <Button type={'submit'}>
