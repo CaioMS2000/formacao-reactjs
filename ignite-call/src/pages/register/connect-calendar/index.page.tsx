@@ -16,6 +16,10 @@ export default function ConnectCalendar() {
         return
     }
 
+    async function handleNavigateToNextStep() {
+        await router.push('/register/time-intervals')
+    }
+
     return (
         <>
             <Container>
@@ -34,9 +38,6 @@ export default function ConnectCalendar() {
                         {isSignedIn ? (
                             <Button
                                 size={'sm'}
-                                onClick={() => {
-                                    return signIn('google')
-                                }}
                                 disabled
                             >
                                 Conectado
@@ -60,7 +61,7 @@ export default function ConnectCalendar() {
                             Calendar.
                         </AuthError>
                     )}
-                    <Button type="submit" disabled={!isSignedIn}>
+                    <Button onClick={handleNavigateToNextStep} type="submit" disabled={!isSignedIn}>
                         Próximo passo <ArrowRight />
                     </Button>
                 </ConnectBox>
