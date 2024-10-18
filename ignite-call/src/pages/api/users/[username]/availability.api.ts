@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { setCookie } from 'nookies'
 import { prisma } from '../../../../lib/prisma'
 import dayjs from 'dayjs'
 

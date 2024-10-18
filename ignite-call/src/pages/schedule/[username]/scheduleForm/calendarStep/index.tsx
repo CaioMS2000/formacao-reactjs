@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Calendar } from '../../../../../components/calendar'
-import { Container, TimePicker, TimePickerHeader, TimePickerItem, TimePickerList } from './styles'
+import {
+    Container,
+    TimePicker,
+    TimePickerHeader,
+    TimePickerItem,
+    TimePickerList,
+} from './styles'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { api } from '../../../../../lib/axios'
+import { useQuery } from '@tanstack/react-query'
 
 interface Availability {
     possibleTimes: number[]
@@ -12,37 +19,52 @@ interface Availability {
 
 export function CalendarStep() {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-    const [availability, setAvailability] = useState<Availability|null>(null)
     const isDateSelected = selectedDate !== null
     const weekDay = selectedDate ? dayjs(selectedDate).format('dddd') : null
-    const describedDate = selectedDate ? dayjs(selectedDate).format('DD[ de ]MMMM') : null
+    const describedDate = selectedDate
+        ? dayjs(selectedDate).format('DD[ de ]MMMM')
+        : null
     const router = useRouter()
     const username = String(router.query.username)
+    const selectedDateWithoutTime = selectedDate
+        ? dayjs(selectedDate).format('YYYY-MM-DD')
+        : null
+    const {data: availability} = useQuery<Availability>(['availability', selectedDateWithoutTime], async () => {
+        const response = await api.get(`/users/${username}/availability`, {
+            params: {
+                date: selectedDateWithoutTime,
+            },
+        })
 
-    useEffect(() => {
-        if(selectedDate){
-            const date = dayjs(selectedDate).format('YYYY-MM-DD')
-            console.log(date)
-            api.get(`/users/${username}/availability`, {
-                params: {
-                    date,
-                }
-            }).then(response => {
-                setAvailability(response.data)
-            })	
-        }
-    }, [selectedDate, username])
+        return response.data
+    }, {enabled: !!selectedDate})
 
     return (
         <>
             <Container isTimePickerOpen={isDateSelected}>
-                <Calendar selectedDate={selectedDate} onDateSelected={setSelectedDate} />
+                <Calendar
+                    selectedDate={selectedDate}
+                    onDateSelected={setSelectedDate}
+                />
                 {isDateSelected && (
                     <TimePicker>
-                        <TimePickerHeader>{weekDay} <span>{describedDate}</span></TimePickerHeader>
+                        <TimePickerHeader>
+                            {weekDay} <span>{describedDate}</span>
+                        </TimePickerHeader>
                         <TimePickerList>
                             {availability?.possibleTimes.map(hour => {
-                                return <TimePickerItem key={hour} disabled={!availability.availableTimes.includes(hour)}>{String(hour).padStart(2, '0')}</TimePickerItem>
+                                return (
+                                    <TimePickerItem
+                                        key={hour}
+                                        disabled={
+                                            !availability.availableTimes.includes(
+                                                hour
+                                            )
+                                        }
+                                    >
+                                        {String(hour).padStart(2, '0')}
+                                    </TimePickerItem>
+                                )
                             })}
                         </TimePickerList>
                     </TimePicker>
