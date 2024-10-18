@@ -38,7 +38,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
     const currentYear = currentDate.format('YYYY')
     const router = useRouter()
     const username = String(router.query.username)
-    const monthIndex = currentDate.get('month')
+    const monthIndex = currentDate.get('month') + 1
     const yearIndex = currentDate.get('year')
     const {data: blockedDates} = useQuery<BlockedDates>(
         ['blocked-dates', monthIndex, yearIndex],
@@ -84,7 +84,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
             ...previousMonthFillArray.map(date => ({ date, disabled: true })),
             ...daysInMonthArray.map(date => ({
                 date,
-                disabled: date.endOf('day').isBefore(new Date()) || blockedDates.blockedWeekDays.includes(date.get('day')),
+                disabled: date.endOf('day').isBefore(new Date()) || blockedDates.blockedWeekDays.includes(date.get('day')) || blockedDates.blockedDates.includes(date.get('date')),
             })),
             ...nextMonthFillArray.map(date => ({ date, disabled: true })),
         ]

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Calendar } from '../../../../../components/calendar'
 import {
     Container,
@@ -17,7 +17,11 @@ interface Availability {
     availableTimes: number[]
 }
 
-export function CalendarStep() {
+interface CalendarStepProps {
+    onSelectedDateTime: (date: Date) => void
+}
+
+export function CalendarStep({ onSelectedDateTime }: CalendarStepProps) {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const isDateSelected = selectedDate !== null
     const weekDay = selectedDate ? dayjs(selectedDate).format('dddd') : null
@@ -29,15 +33,27 @@ export function CalendarStep() {
     const selectedDateWithoutTime = selectedDate
         ? dayjs(selectedDate).format('YYYY-MM-DD')
         : null
-    const {data: availability} = useQuery<Availability>(['availability', selectedDateWithoutTime], async () => {
-        const response = await api.get(`/users/${username}/availability`, {
-            params: {
-                date: selectedDateWithoutTime,
-            },
-        })
+    const { data: availability } = useQuery<Availability>(
+        ['availability', selectedDateWithoutTime],
+        async () => {
+            const response = await api.get(`/users/${username}/availability`, {
+                params: {
+                    date: selectedDateWithoutTime,
+                },
+            })
 
-        return response.data
-    }, {enabled: !!selectedDate})
+            return response.data
+        },
+        { enabled: !!selectedDate }
+    )
+
+    function handleSelectTime(hour: number) {
+        const dateWithTime = dayjs(selectedDate)
+            .set('hour', hour)
+            .startOf('hour')
+            .toDate()
+        onSelectedDateTime(dateWithTime)
+    }
 
     return (
         <>
@@ -61,6 +77,7 @@ export function CalendarStep() {
                                                 hour
                                             )
                                         }
+                                        onClick={() => handleSelectTime(hour)}
                                     >
                                         {String(hour).padStart(2, '0')}
                                     </TimePickerItem>

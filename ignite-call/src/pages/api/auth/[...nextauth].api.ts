@@ -13,6 +13,9 @@ export function buildNextAuthOptions(req: NextApiRequest | NextPageContext['req'
                 authorization: {
                     params:{
                         scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
+                        prompt: 'consent',
+                        access_type: 'offline',
+                        response_type: 'code'
                     }
                 },
                 profile (profile: GoogleProfile, _){

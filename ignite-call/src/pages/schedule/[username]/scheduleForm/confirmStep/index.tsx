@@ -4,6 +4,9 @@ import { CalendarBlank, Clock } from 'phosphor-react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import dayjs from 'dayjs'
+import { api } from '../../../../../lib/axios'
+import { useRouter } from 'next/router'
 
 const confirmFormSchema = z.object({
     name: z.string().min(3, 'O nome precisa ter pelomenos 3 caracteres'),
@@ -13,17 +16,35 @@ const confirmFormSchema = z.object({
 
 type ConfirmFormData = z.infer<typeof confirmFormSchema>
 
-export function ConfirmStep() {
-    const {register, handleSubmit, formState:{isSubmitting, errors}} = useForm<ConfirmFormData>({resolver: zodResolver(confirmFormSchema)})
+interface ConfirmStepProps{
+    schedulingDate: Date
+    onCancelConfirmation: () => void
 
-    async function handleConfirmScheduling(data: ConfirmFormData) {}
+}
+
+export function ConfirmStep({schedulingDate, onCancelConfirmation}: ConfirmStepProps) {
+    const {register, handleSubmit, formState:{isSubmitting, errors}} = useForm<ConfirmFormData>({resolver: zodResolver(confirmFormSchema)})
+    const router = useRouter()
+    const username = String(router.query.username)
+    const describedDate = dayjs(schedulingDate).format('DD[ de ]MMMM[ de ]YYYY')
+    const describedTime = dayjs(schedulingDate).format('HH:mm[h]')
+
+    async function handleConfirmScheduling(data: ConfirmFormData) {
+        await api.post(`/users/${username}/schedule`, {
+            name: data.name,
+            email: data.email,
+            observations: data.observations,
+            date: schedulingDate,
+        })
+        await router.push((`/schedule/${username}`))
+    }
 
     return (
         <>
             <ConfirmForm as="form" onSubmit={handleSubmit(handleConfirmScheduling)}>
                 <FormHeader>
-                    <Text><CalendarBlank /> 22 de abril de 2021</Text>
-                    <Text><Clock /> 11:00h</Text>
+                    <Text><CalendarBlank />{describedDate}</Text>
+                    <Text><Clock />{describedTime}</Text>
                 </FormHeader>
                 <label>
                     <Text size={'sm'}>Nome completo</Text>
@@ -40,7 +61,7 @@ export function ConfirmStep() {
                     <TextArea {...register('observations')} />
                 </label>
                 <FormActions>
-                    <Button type="button" variant={'tertiary'}>Cancelar</Button>
+                    <Button type="button" variant={'tertiary'} onClick={onCancelConfirmation}>Cancelar</Button>
                     <Button type="submit" disabled={isSubmitting}>Confirmar</Button>
                 </FormActions>
             </ConfirmForm>

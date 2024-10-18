@@ -59,9 +59,8 @@ export default async function handler(
         const isTimeBlocked = blockedTimes.some(
             (blockedTime) => blockedTime.date.getHours() === time
         )
-        // const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
-        // return !isTimeBlocked && !isTimeInPast
-        return !isTimeBlocked // até o momento, na aula só é usada essa condição
+        const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
+        return !isTimeBlocked && !isTimeInPast
     })
 
     return res.status(201).json({availableTimes, possibleTimes})
